@@ -27,6 +27,13 @@ async function run() {
 
         const foodCollection = client.db('foodsDB').collection('foods')
 
+
+        app.get('/foods', async(req, res) => {
+            const cursor = foodCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         app.post('/foods', async (req, res) => {
             const foods = req.body;
             const result = await foodCollection.insertOne(foods);
