@@ -25,7 +25,8 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
 
-        const foodCollection = client.db('foodsDB').collection('foods')
+        const foodCollection = client.db('foodsDB').collection('foods');
+        const requestCollection = client.db('foodsDB').collection('requests');
 
 
         app.get('/foods', async (req, res) => {
@@ -76,7 +77,23 @@ async function run() {
             const query = { _id: new ObjectId(id) };
             const result = await foodCollection.deleteOne(query);
             res.send(result)
-        })
+        });
+
+
+        // -------------------------- Request Database ----------------------------
+
+        app.get('/requests', async(req, res) => {
+            const cursor = requestCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        });
+
+
+        app.post('/requests', async(req, res) => {
+            const requests = req.body;
+            const result = await requestCollection.insertOne(requests);
+            res.send(result)
+        });
 
 
 
